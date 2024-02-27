@@ -1,3 +1,3 @@
 import { requestsApi } from "./api";
 
-export const {useGetItemsQuery} = requestsApi
+export const {useGetItemsQuery, useItemDetailQuery} = requestsApi

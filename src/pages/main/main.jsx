@@ -1,68 +1,92 @@
-import { useCallback, useEffect, useState } from "react";
-import { useGetItemsQuery } from "../../store/requests";
+import { useEffect, useState } from "react";
+import { useGetItemsQuery, useItemDetailQuery } from "../../store/requests";
 
 import styles from './styles.module.scss';
 
 export const Main = () => {
-  const [pokemons, setPokemons] = useState([])
-  const [details, setDetails] = useState(null)
+  const [url, setUrl] = useState('');
+  const [isOpenDetail, setIsOpenDetail] = useState(null);
+  // const [page, setPage] = useState('');
 
-  console.log('details', details);
+  const { data=[] } = useGetItemsQuery({ pageSize: 20, page: 1 });
+  // const { data=[] } = useGetItemsQuery();
+  const { data: detailItem = [] } = useItemDetailQuery({ url });
 
-  const { data=[] } = useGetItemsQuery({ pageSize: 2, page: 1 })
+  
+  const checkPosition = () => {
+    const height = document.body.offsetHeight;
+    console.log('height', height);
+    const screenHeight = window.innerHeight;
+    console.log('screenHeight', screenHeight);
+    const scrolled = window.scrollY
+    console.log('scrolled', scrolled);
+    const threshold = height - screenHeight / 3
+    console.log('threshold', threshold);
+    const position = scrolled + screenHeight
+    console.log('position', position);
 
-  // console.log('data', data);
 
-  const LoadPokemons = useCallback(async () => {
-    for (var i = 0; i < data?.results?.length; i++) {
-      await fetch(data.results[i].url)
-        .then((res) => res.json())
-        .then((res) => {
-          console.log('res', res);
-          const pokemonInfo = {
-            name: res.name,
-            id: res.id,
-            types: res.types,
-            number: res.id,
-            species: res.species.name,
-            image:
-              res.sprites.front_default,
-          };
-          setPokemons((prev) => [...prev, pokemonInfo])
-        });
+    if (position >= threshold) {
+      console.log('works!!!')
     }
-  }, [data]);
-
+  }
+  
   useEffect(() => {
-      LoadPokemons();
-  }, [LoadPokemons])
+    checkPosition()
+  }, [checkPosition])
 
-  // console.log('pokemons', pokemons);
+  const specifications = (item, param) => {
+    return item?.reduce((prev, el) => {
+      return [...prev, el[param].name] 
+    }, []).join(', ')
+  }
+
+  const detail = () => {
+    return (
+      <div className={styles.detail}>
+        <div className={styles.title}>
+          <span>{detailItem.name}</span>
+        </div>
+        <div className={styles.photo}>
+          <img src={detailItem.sprites?.front_default} alt="покемон" />
+          <img src={detailItem.sprites?.back_default} alt="покемон" />
+          <img src={detailItem.sprites?.front_shiny} alt="покемон" />
+          <img src={detailItem.sprites?.back_shiny} alt="покемон" />
+        </div>
+        <div className={styles.param}>
+          <span>Способности: </span>
+          <span>
+            {specifications(detailItem.abilities, 'ability')}
+          </span>
+        </div>
+        <div className={styles.param}>
+          <span>Тип: </span>
+          <span>{specifications(detailItem.types, 'type')}</span>
+        </div>
+      </div>
+    )
+  }
+
+  const onOpenDetailHandler = (item) => () => {
+    setUrl(item)
+    setIsOpenDetail((v) => url !== item ? v : !v)
+  }
   
   return (
     <div className={styles.wrapper}>
       <div>
-        {pokemons.map(({ image, name, species }) => {
-          return (
-            <div key={name} className={styles.card} onClick={(v) => setDetails(!v)}>
-              <div>
-                <img src={image} alt='покемон' />
-                <div>
-                  <div>
-                    <span>Название:</span>
-                    <span>{name}</span>
-                  </div>
-                  <div>
-                    <span>Специализация:</span>
-                    <span>{species}</span>
-                  </div>
-                </div>
-              </div>
+        <div>
+          {data?.results?.map(( item, index ) => 
+            <div key={item.name} className={styles.cards} onClick={onOpenDetailHandler(item.url)}>
+              <div>{index + 1}:</div>
+              <span>
+                {item.name}
+              </span>
             </div>
-          )
-        })}
+          )}
+        </div>
+      {isOpenDetail && url && detail()}
       </div>
-        {details && <div>Проверка связи</div>}
     </div>
   )
 }
