@@ -5,32 +5,46 @@ export const requestsApi = createApi({
   reducerPath: 'requestsApi',
   endpoints: (builder) => ({
     getItems: builder.query({
-      // query: ({ ids, page, pageSize = 10, url }) => {
-      query: ({ page, pageSize }) => {
-        // return { method: 'get', url: 'pokemon'}
+      query: ({ page = 1, pageSize }) => {
 
         const params = new URLSearchParams();
-        // const idsString = ids ? [ids].flat().join(",") : ids;
+
         if (page) {
           params.append("limit", pageSize);
-          params.append("offset", pageSize * (page - 1));
+          // params.append("offset", pageSize * (page - 1));
         }
-        // if (idsString) {
-        //   params.append("id", idsString);
-        // }
-        const stringParams = params.toString();
 
-        console.log('stringParams', stringParams);
+        const stringParams = params.toString();
 
         const endpoint = stringParams.length
           ? `${page ? "/pokemon" : ""}`
           : "/pokemon";
+        // const endpoint = stringParams.length ? "/pokemon" : '';
         return {
           method: "get",
           url: `${endpoint}?${stringParams}`,
         };
       },
     }),
+    addData: builder.query({
+      query: ({ page, pageSize }) => {
+        if (page) {
+          const params = new URLSearchParams()
+            
+          params.append('limit', pageSize);
+          params.append('offset', pageSize * (page - 1))
+          
+          const stringParams = params.toString()
+          const endpoint = stringParams.length
+          ? `${page ? "/pokemon" : ""}`
+          : "/pokemon";
+          return {
+          method: "get",
+          url: `${endpoint}?${stringParams}`,
+        }
+      }
+    }
+  }),
     itemDetail: builder.query({
       query: ({ url }) => {
         return { method: 'get', url: url && url}
@@ -38,4 +52,3 @@ export const requestsApi = createApi({
     })
   }),
 });
-
