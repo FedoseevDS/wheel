@@ -5,30 +5,22 @@ import { useAddItemQuery, useGetItemsQuery } from "../../store/requests";
 import styles from './styles.module.scss';
 import { Link } from "react-router-dom";
 
+import styled from 'styled-components';
+
 export const Main = () => {
   const [fullData, setFullData] = useState([])
   const [url, setUrl] = useState('');
   const [page, setPage] = useState(1)
   const [isScrollDown, setIsScrollDown] = useState(false);
   const [isScrollUp, setIsScrollUp] = useState(false);
+
+  const [startIndex, setStartIndex] = useState(0)
+  const [endIndex, setEndIndex] = useState(20)
+
   const { data } = useGetItemsQuery({ limit: 20 }, { skip: page > 1 })
   const { data: addData } = useAddItemQuery({ limit: 1, page }, { skip: page === 1 })
 
-  // const scrollUp = useRef(false)
-  // const scrollDown = useRef(false)
-  // console.log('ref', ref);
-  // useEffect(() => {
-  //   console.log('scrollUp', scrollUp);
-  //   console.log('scrollDown', scrollDown);
-  // }, [scrollUp, scrollDown])
-
-  // console.log('addData', addData);
-  // console.log('data', data);
-
   const newData = fullData?.length > 20 ? fullData : data?.results
-
-  // console.log('newData', newData);
-
 
   // TODO: попробовать заменить two useEffect on useMemo
 
@@ -38,7 +30,6 @@ export const Main = () => {
 
   useEffect(() => {
     setFullData((prev) => prev && addData ? [...prev, ...addData.results] : [])
-    // setFullData((prev) => prev && addData ? [...addData.results] : [])
   }, [addData])
 
   useEffect(() => {
@@ -46,16 +37,14 @@ export const Main = () => {
     //   return
     // }
     if (isScrollDown) {
-      // setPage((prev) => prev < 20 ? prev + 1 : prev)
       setPage((prev) => prev + 1)
-      // setFullData((prev) => console.log('prev', prev))
       setIsScrollDown(false)
     }
   }, [isScrollDown, data, addData, fullData])
 
   useEffect(() => {
     if (isScrollUp) {
-      setPage((prev) => prev > 0 ? prev - 1 : prev)
+      // setPage((prev) => prev > 0 ? prev - 1 : prev)
       setIsScrollUp(false)
     }
   }, [isScrollUp])
@@ -72,24 +61,17 @@ export const Main = () => {
     const scrollTop = target.documentElement.scrollTop;
     const innerHeight = window.innerHeight
 
-    // ref.current.onscroll = scrollTop
-    // ref.current.onscrollend = scrollHeight
-
     if (scrollTop <= 42) {
       setIsScrollUp(true);
-      // scrollUp.target = true
     }
     if (scrollHeight - scrollTop - innerHeight < 42) {
       setIsScrollDown(true)
-      // scrollDown.target = false
-      // window.scrollTo(0, (scrollHeight + scrollTop));
     }
   }
 
   const selectedIds = (item) => () => {
     const domains = item.split('/')
     setUrl(domains[domains.length - 2])
-    // return domains[domains.length - 2]
   }
 
   // взять размер одного элемента
@@ -103,10 +85,14 @@ export const Main = () => {
     <div className={styles.wrapper}>
       <div>
         <div>
-          {/* {checkData?.map(( item, index ) =>  */}
-          {/* {data?.results?.map(( item, index ) =>  */}
           {newData?.map((item, index) =>
-            <Link key={item?.name} to={url} className={styles.cards} onClick={selectedIds(item?.url)}>
+            <Link 
+              key={item?.name} 
+              to={url} 
+              className={styles.cards} 
+              onClick={selectedIds(item?.url)}
+              // style={{  }}
+              >
               <div>{ index + 1 }:</div>
               <span>
                 {item?.name}
