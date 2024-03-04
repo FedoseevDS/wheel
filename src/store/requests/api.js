@@ -5,18 +5,11 @@ export const requestsApi = createApi({
   reducerPath: 'requestsApi',
   endpoints: (builder) => ({
     getItems: builder.query({
-      query: ({ limit }) => ({
+      query: ({ page }) => ({
         method: 'get',
         url: '/pokemon',
-        params: { limit },
+        params: { limit: page * 20 },
       }),
     }),
-    addItem: builder.query({
-      query: ({ limit, page }) => ({
-        method: 'get',
-        url: '/pokemon',
-        params: { limit, offset: 20 + page,  },
-      }),
-    })
   }),
 });

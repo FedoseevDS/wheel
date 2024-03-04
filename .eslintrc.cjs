@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  env: { browser: true, es2020: true },
+  env: { browser: true, es2020: true, node: true },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -35,21 +35,6 @@ module.exports = {
             group: 'external',
             pattern: 'react',
             position: 'before',
-          },
-          {
-            group: 'internal',
-            pattern: 'components/**',
-            position: 'after',
-          },
-          {
-            group: 'internal',
-            pattern: 'pages/**',
-            position: 'after',
-          },
-          {
-            group: 'internal',
-            pattern: 'store/**',
-            position: 'after',
           },
         ],
       },
