@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 import { useGetItemsQuery } from '../../store/requests';
 
@@ -9,7 +10,9 @@ const Main = () => {
 
   const { data } = useGetItemsQuery({ page: addData });
 
-  const itemHeight = 100;
+  console.log('data', data);
+
+  const itemHeight = 60;
   const containerHeight = 600;
   const overscan = 3;
 
@@ -51,10 +54,13 @@ const Main = () => {
     let endIndex = Math?.ceil(rangeEnd / itemHeight);
 
     if (startIndex) {
-      if (data.conunt < data.results.length) {
+      if (data.conunt <= data.results.length) {
         return;
       }
-
+      if (startIndex <= 2) {
+        setAddData(startIndex);
+        return;
+      }
       setAddData(startIndex + 1);
     }
     startIndex = Math.max(0, startIndex - overscan);
@@ -118,7 +124,6 @@ const Main = () => {
                     color: 'black',
                     width: '400px',
                     alignSelf: 'center',
-                    padding: '10px',
                     borderRadius: '15px',
                     boxShadow: '0 0 8px 3px #e27f7f',
                     cursor: 'pointer',

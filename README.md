@@ -1,8 +1,3 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Тестовое задание: Колесо (бесконечный скролл + виртуализация)
+Стек: React, redux, react-router, styled-components
+Задача: Приложение с загрузкой дынных с любого mock api, деталкой для каждой записи и бесконечным скроллом + виртуализацией, на странице должно отображаться не более 10 записей, в деталке может отображаться любая информация
