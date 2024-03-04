@@ -1,3 +1,3 @@
-import { requestsApi } from "./api";
+import { requestsApi } from './api';
 
-export const {useGetItemsQuery, useAddItemQuery} = requestsApi
+export const { useGetItemsQuery, useGetIdItemsQuery } = requestsApi;

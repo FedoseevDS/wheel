@@ -11,5 +11,11 @@ export const requestsApi = createApi({
         params: { limit: page * 20 },
       }),
     }),
+    getIdItems: builder.query({
+      query: ({ id }) => ({
+        method: 'get',
+        url: `/pokemon/${id}`,
+      }),
+    }),
   }),
 });

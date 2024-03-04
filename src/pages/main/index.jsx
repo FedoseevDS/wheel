@@ -9,8 +9,6 @@ const Main = () => {
 
   const { data } = useGetItemsQuery({ page: addData });
 
-  console.log('data', data);
-
   const itemHeight = 100;
   const containerHeight = 600;
   const overscan = 3;
@@ -76,18 +74,13 @@ const Main = () => {
 
   const totalListHeight = itemHeight * listItems.length;
 
-  // const selectedIds = useMemo((item) => {
-  //   const id = item?.split('/');
-  //   setDetailsLink(id[id?.length - 2]);
-  // }, []);
-
   return (
     <div>
       <div
         ref={scrollElementRef}
         style={{
           height: containerHeight,
-          width: '400px',
+          width: '1000px',
           overflow: 'auto',
           marginTop: '50px',
           marginLeft: 'auto',
@@ -98,27 +91,43 @@ const Main = () => {
         <div style={{ height: totalListHeight, display: 'flex', flexDirection: 'column' }}>
           {virtualItems?.map((virtualItem) => {
             const item = listItems[virtualItem.index];
+            const id = item.url.split('/');
 
             return (
               <div
                 key={item.name}
                 style={{
-                  display: 'inline-block',
+                  display: 'flex',
+                  justifyContent: 'center',
                   height: itemHeight,
                   boxSizing: 'border-box',
-                  width: '80%',
                   textDecoration: 'none',
                   fontSize: '30px',
                   color: 'black',
                   position: 'absolute',
                   top: 0,
                   transform: `translateY(${virtualItem.offsetTop}px)`,
-                  cursor: 'pointer',
                   textAlign: 'center',
-                  padding: '20px',
+                  padding: '5px',
                 }}
               >
-                <Link style={{ border: '1px solid' }}>{item.name}</Link>
+                <Link
+                  to={id[id?.length - 2]}
+                  style={{
+                    textDecoration: 'none',
+                    color: 'black',
+                    width: '400px',
+                    alignSelf: 'center',
+                    padding: '10px',
+                    borderRadius: '15px',
+                    boxShadow: '0 0 8px 3px #e27f7f',
+                    cursor: 'pointer',
+                  }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = '#d07a73')}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = '')}
+                >
+                  {item.name}
+                </Link>
               </div>
             );
           })}
