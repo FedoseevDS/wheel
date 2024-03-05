@@ -12,8 +12,8 @@ const App = () => {
       <BrowserRouter>
         <Layout>
           <Routes>
-            <Route path='/' element={<Main />} />
-            <Route path='/:id' element={<Pokemon />} />
+            <Route path='/wheel/*' element={<Main />} />
+            <Route path='/wheel/:id' element={<Pokemon />} />
           </Routes>
         </Layout>
       </BrowserRouter>
