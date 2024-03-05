@@ -10,8 +10,6 @@ const Main = () => {
 
   const { data } = useGetItemsQuery({ page: addData });
 
-  console.log('data', data);
-
   const itemHeight = 60;
   const containerHeight = 600;
   const overscan = 3;

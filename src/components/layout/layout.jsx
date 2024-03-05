@@ -1,12 +1,10 @@
-import { Header } from "../header/header";
-
-import styles from './styles.module.scss';
+import { Header } from '../header/header';
 
 export const Layout = ({ children }) => {
   return (
-    <div className={styles.wrapper}>
+    <div style={{ paddingLeft: '80px', paddingRight: '80px' }}>
       <Header />
       {children}
     </div>
-  )
-}
+  );
+};
