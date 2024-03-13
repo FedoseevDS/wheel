@@ -8,7 +8,7 @@ export const requestsApi = createApi({
       query: ({ page }) => ({
         method: 'get',
         url: '/pokemon',
-        params: { limit: page * 20 },
+        params: { limit: page * 20, offset: page },
       }),
     }),
     getIdItems: builder.query({

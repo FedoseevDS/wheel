@@ -1,7 +1,6 @@
 import { Paragraph } from '../paragraph/paragraph';
 
 import { description, stack } from './const';
-
 import { Description, Template, Title } from './styles';
 
 export const Header = () => (
