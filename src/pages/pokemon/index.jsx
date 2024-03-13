@@ -1,58 +1,16 @@
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
 
-import { useGetIdItemsQuery } from '../../store/requests';
+import { useGetItemQuery } from '../../store/requests';
+
+import { Img, Param, Photo, Template, Title, Wrapper } from './styles';
 
 export const Pokemon = () => {
   const { id } = useParams();
 
-  console.log('id component', id);
+  const { data = [], isLoading } = useGetItemQuery({ id });
 
-  const { data = [], isLoading } = useGetIdItemsQuery({ id });
-
-  console.log('data', data);
-
-  const specifications = (item, param) => {
-    return item
-      ?.reduce((prev, el) => {
-        return [...prev, el[param].name];
-      }, [])
-      .join(', ');
-  };
-
-  const Template = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  `;
-
-  const Wrapper = styled.div`
-    width: 1000px;
-  `;
-
-  const Title = styled.div`
-    display: flex;
-    justify-content: center;
-    padding-top: 10px;
-    font-size: 45px;
-    font-weight: 900;
-    margin-bottom: 20px;
-  `;
-
-  const Photo = styled.div`
-    display: flex;
-    justify-content: center;
-  `;
-
-  const Img = styled.img`
-    height: 140px;
-    margin-bottom: 20px;
-  `;
-
-  const Param = styled.div`
-    font-size: 25px;
-    margin-bottom: 10px;
-  `;
+  const specifications = (item, param) =>
+    item?.reduce((prev, el) => [...prev, el[param].name], []).join(', ');
 
   return (
     <Template>

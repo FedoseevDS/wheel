@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { Header } from './components/header';
 import Main from './pages/main';
-import { Pokemon } from './pages/pokemon/pokemon';
+import { Pokemon } from './pages/pokemon';
 import store from './store';
 import { Template } from './styles';
 
