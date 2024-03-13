@@ -1,10 +1,10 @@
 import { Header } from '../header/header';
 
-export const Layout = ({ children }) => {
-  return (
-    <div style={{ paddingLeft: '80px', paddingRight: '80px' }}>
-      <Header />
-      {children}
-    </div>
-  );
-};
+import { Template } from './styles';
+
+export const Layout = ({ children }) => (
+  <Template>
+    <Header />
+    {children}
+  </Template>
+);
