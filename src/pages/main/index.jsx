@@ -33,7 +33,7 @@ const Main = () => {
     }
 
     const scrollHandler = () => {
-      const scrollTop = scrollElement.scrollTop;
+      const { scrollTop } = scrollElement;
 
       setScrollTop(scrollTop);
     };

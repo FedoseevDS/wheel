@@ -3,10 +3,11 @@ module.exports = {
   env: { browser: true, es2020: true, node: true },
   extends: [
     'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
     'plugin:import/recommended',
+    'airbnb',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
     'prettier',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
@@ -20,6 +21,8 @@ module.exports = {
     'import/no-unresolved': 0,
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'import/prefer-default-export': 0,
+    'no-plusplus': 'off',
+    'react/function-component-definition': 0,
     'import/order': [
       1,
       {
