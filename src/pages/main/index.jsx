@@ -2,92 +2,74 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useGetItemsQuery } from '../../store/requests';
 
-import { containerHeight, itemHeight, overscan } from './const';
+import { itemHeight, visibleRows } from './const';
 import { Item, Link, Scroll, Wrapper } from './styles';
 
 const Main = () => {
-  const [addData, setAddData] = useState(1);
+  const [getResults, setGetResults] = useState([]);
+  const [start, setStart] = useState(0);
 
-  const { data } = useGetItemsQuery({ page: addData });
+  const { data } = useGetItemsQuery({ page: start });
 
-  const [listItems, setListItems] = useState([]);
-  const [scrollTop, setScrollTop] = useState(0);
-
-  const scrollElementRef = useRef(null);
+  const rootRef = useRef(null);
+  const prevRangeStartRef = useRef(0);
 
   useEffect(() => {
-    if (data) {
-      setListItems(data?.results);
+    if (!data) {
+      return;
     }
+
+    setGetResults(data.results);
   }, [data]);
 
+  const getTopHeight = useMemo(() => itemHeight * start, [start]);
+  const getBottomHeight = useMemo(
+    () => getResults.length - (start + visibleRows),
+    [start, getResults],
+  );
+
   useEffect(() => {
-    const scrollElement = scrollElementRef.current;
+    const scrollElement = rootRef.current;
 
     if (!scrollElement) {
       return;
     }
 
-    const scrollHandler = () => {
-      setScrollTop(scrollElement.scrollTop);
+    const onScroll = () => {
+      const rangeStart = scrollElement.scrollTop;
+
+      if (getResults.length === 60) {
+        if (rangeStart < prevRangeStartRef.current) {
+          setStart(Math.ceil(rangeStart / itemHeight));
+        }
+
+        prevRangeStartRef.current = rangeStart;
+        return;
+      }
+
+      setStart(Math.ceil(rangeStart / itemHeight));
     };
 
-    scrollHandler();
-
-    scrollElement.addEventListener('scroll', scrollHandler);
-    // eslint-disable-next-line consistent-return
-    return () => scrollElement.removeEventListener('scroll', scrollHandler);
-  }, []);
-
-  const virtualItems = useMemo(() => {
-    const rangeStart = scrollTop;
-    const rangeEnd = scrollTop + containerHeight;
-
-    let startIndex = Math?.floor(rangeStart / itemHeight);
-    let endIndex = Math?.ceil(rangeEnd / itemHeight);
-
-    if (startIndex) {
-      if (data.conunt <= data.results.length) {
-        return [];
-      }
-      if (startIndex <= 2) {
-        setAddData(startIndex);
-        return [];
-      }
-      setAddData(startIndex + 1);
-    }
-    startIndex = Math.max(0, startIndex - overscan);
-    endIndex = Math.min(listItems.length - 1, endIndex + overscan);
-
-    const collectorVirtualItems = [];
-
-    for (let index = startIndex; index <= endIndex; index++) {
-      collectorVirtualItems.push({
-        index,
-        offsetTop: index * itemHeight,
-      });
-    }
-
-    return collectorVirtualItems;
-  }, [scrollTop, listItems, data]);
-
-  const totalListHeight = itemHeight * listItems.length;
+    scrollElement.addEventListener('scroll', onScroll);
+    return () => scrollElement.removeEventListener('scroll', onScroll);
+  }, [getResults]);
 
   return (
-    <Scroll ref={scrollElementRef} height={containerHeight}>
-      <Wrapper height={totalListHeight}>
-        {virtualItems?.map((virtualItem) => {
-          const item = listItems[virtualItem.index];
+    <Scroll ref={rootRef} height={itemHeight * visibleRows + 1}>
+      <div style={{ height: getTopHeight }} />
+      <Wrapper>
+        {getResults?.slice(start, start + visibleRows + 1).map((item) => {
           const domains = item.url.split('/');
           const id = domains.length - 2;
 
           return (
-            <Item key={item.name} height={itemHeight} value={virtualItem.offsetTop}>
+            <Item key={item.name} height={itemHeight}>
               <Link href={domains[id]}>{item.name}</Link>
             </Item>
           );
         })}
       </Wrapper>
+      <div style={{ height: getBottomHeight }} />
     </Scroll>
   );
 };

@@ -18,15 +18,12 @@ export const Wrapper = styled.div`
 
 export const Item = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: start;
   height: ${({ height }) => `${height}px`};
   box-sizing: border-box;
   text-decoration: none;
   font-size: 30px;
   color: black;
-  position: absolute;
-  top: 0;
-  transform: translateY(${(e) => `${e.value}px`});
   text-align: center;
   padding: 5px;
 `;
