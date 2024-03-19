@@ -7,7 +7,7 @@ export const requestsApi = createApi({
     getItems: builder.query({
       query: ({ page }) => ({
         method: 'get',
-        url: `pokemon`,
+        url: `/pokemon`,
         params: {
           limit: page !== 0 ? 20 + page : 20,
         },
@@ -16,7 +16,7 @@ export const requestsApi = createApi({
     getItem: builder.query({
       query: ({ id }) => ({
         method: 'get',
-        url: `pokemon/${id}`,
+        url: `/pokemon/${id}`,
       }),
     }),
   }),
