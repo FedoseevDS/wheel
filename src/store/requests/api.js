@@ -16,7 +16,7 @@ export const requestsApi = createApi({
     getItem: builder.query({
       query: ({ id }) => ({
         method: 'get',
-        url: `/pokemon/${id}`,
+        url: `pokemon/${id}`,
       }),
     }),
   }),
