@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGetItemsQuery } from '../../store/requests';
 
 import { itemHeight, visibleRows } from './const';
-import { Item, Link, Scroll, Wrapper } from './styles';
+import { Footer, Item, Link, Scroll, Wrapper } from './styles';
 
 const Main = () => {
   const [getResults, setGetResults] = useState([]);
@@ -55,22 +55,34 @@ const Main = () => {
   }, [getResults]);
 
   return (
-    <Scroll ref={rootRef} height={itemHeight * visibleRows + 1}>
-      <div style={{ height: getTopHeight }} />
-      <Wrapper>
-        {getResults?.slice(start, start + visibleRows + 1).map((item) => {
-          const domains = item.url.split('/');
-          const id = domains.length - 2;
+    <>
+      <Scroll ref={rootRef} height={itemHeight * visibleRows + 1}>
+        <div style={{ height: getTopHeight }} />
+        <Wrapper>
+          {getResults?.slice(start, start + visibleRows + 1).map((item) => {
+            const domains = item.url.split('/');
+            const id = domains.length - 2;
 
-          return (
-            <Item key={item.name} height={itemHeight}>
-              <Link href={domains[id]}>{item.name}</Link>
-            </Item>
-          );
-        })}
-      </Wrapper>
-      <div style={{ height: getBottomHeight }} />
-    </Scroll>
+            return (
+              <Item key={item.name} height={itemHeight}>
+                <Link href={domains[id]}>{item.name}</Link>
+              </Item>
+            );
+          })}
+        </Wrapper>
+        <div style={{ height: getBottomHeight }} />
+      </Scroll>
+      <Footer>
+        <div>Разработчик: Федосеев Д.С.</div>
+        <a
+          href='https://github.com/FedoseevDS/wheel'
+          target='_blank'
+          rel='noreferrer nofollow noopener'
+        >
+          Ссылка на GitHub
+        </a>
+      </Footer>
+    </>
   );
 };
 

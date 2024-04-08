@@ -41,3 +41,9 @@ export const Link = styled.a`
     background-color: #d07a73;
   }
 `;
+
+export const Footer = styled.div`
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+`;
